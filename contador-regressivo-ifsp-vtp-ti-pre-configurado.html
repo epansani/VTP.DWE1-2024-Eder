@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador Regressivo</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #countdown {
+            font-size: 300px; 
+            color: black; 
+            margin-top: 40px;
+        }
+
+        div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input, button {
+            font-size: 16px; 
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h2 id="countdown">00:00</h2>
+    
+    <div>
+        <div> configuração: </div>
+        <label for="minutes">Minutos:</label>
+        <input type="number" id="minutes" value="0" min="0" />
+        <label for="seconds">Segundos:</label>
+        <input type="number" id="seconds" value="30" min="0" max="59" />
+        <button id="startBtn">Iniciar</button>
+        <div> | pré-configurados: </div>
+        <button id="startBtn1">Iniciar 1 minuto</button>
+        <button id="startBtn2">Iniciar 2 minutos</button>
+        <button id="startBtn3">Iniciar 3 minutos</button>
+    </div>
+
+    <script>
+        const countdownElement = document.getElementById('countdown');
+        const startBtn = document.getElementById('startBtn');
+        let interval;
+        
+        const contadorregressivo = function (minutesInput, secondsInput) {
+        
+            let totalSeconds = minutesInput * 60 + secondsInput;
+
+            countdownElement.style.color = 'black';
+                clearInterval(interval); // Evitar múltiplos contadores
+
+                interval = setInterval(() => {
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const seconds = totalSeconds % 60;
+
+                    countdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                    if (totalSeconds > 0) {
+                        totalSeconds--;
+                    } else {
+                        clearInterval(interval);
+                        countdownElement.style.color = 'darkred'; 
+                    }
+                }, 1000);
+                
+        }
+
+        startBtn.addEventListener('click', () => {
+            const minutesInput = parseInt(document.getElementById('minutes').value);
+            const secondsInput = parseInt(document.getElementById('seconds').value);
+
+            contadorregressivo(minutesInput, secondsInput);
+
+            
+        });
+        
+        startBtn1.addEventListener('click', () => {
+            const minutesInput = parseInt(1);
+            const secondsInput = parseInt(0);
+            contadorregressivo(minutesInput, secondsInput);
+        });
+        
+        startBtn2.addEventListener('click', () => {
+            const minutesInput = parseInt(2);
+            const secondsInput = parseInt(0);
+            contadorregressivo(minutesInput, secondsInput);
+        });
+        
+        startBtn3.addEventListener('click', () => {
+            const minutesInput = parseInt(3);
+            const secondsInput = parseInt(0);
+            contadorregressivo(minutesInput, secondsInput);
+        });        
+        
+    </script>
+</body>
+</html>
+
