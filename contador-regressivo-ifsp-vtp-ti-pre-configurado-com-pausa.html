@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador Regressivo</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #countdown {
+            font-size: 300px; 
+            color: black; 
+            margin-top: 40px;
+        }
+
+        div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input, button {
+            font-size: 16px; 
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h2 id="countdown">00:00</h2>
+    
+    <div>
+        <div> configuração: </div>
+        <label for="minutes">Minutos:</label>
+        <input type="number" id="minutes" value="0" min="0" />
+        <label for="seconds">Segundos:</label>
+        <input type="number" id="seconds" value="30" min="0" max="59" />
+        <button id="startBtn">Iniciar</button>
+        <button id="pauseBtn">Pausar</button>
+        <button id="resetBtn">Zerar</button>
+        <div> | pré-configurados: </div>
+        <button id="startBtn1">Iniciar 1 minuto</button>
+        <button id="startBtn2">Iniciar 2 minutos</button>
+        <button id="startBtn3">Iniciar 3 minutos</button>
+        <button id="startBtn5">Iniciar 5 minutos</button>
+    </div>
+
+    <script>
+        const countdownElement = document.getElementById('countdown');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        let interval;
+        let isPaused = false;
+        let totalSeconds;
+
+        const contadorregressivo = function (minutesInput, secondsInput) {
+            totalSeconds = minutesInput * 60 + secondsInput;
+
+            countdownElement.style.color = 'black';
+            clearInterval(interval); // Evitar múltiplos contadores
+
+            interval = setInterval(() => {
+                if (!isPaused) {
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const seconds = totalSeconds % 60;
+
+                    countdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                    if (totalSeconds > 0) {
+                        totalSeconds--;
+                    } else {
+                        clearInterval(interval);
+                        countdownElement.style.color = 'darkred'; 
+                    }
+                }
+            }, 1000);
+        }
+
+        startBtn.addEventListener('click', () => {
+            const minutesInput = parseInt(document.getElementById('minutes').value);
+            const secondsInput = parseInt(document.getElementById('seconds').value);
+            isPaused = false;
+            contadorregressivo(minutesInput, secondsInput);
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            isPaused = !isPaused; // Alterna entre pausa e continuar
+            pauseBtn.textContent = isPaused ? 'Continuar' : 'Pausar'; // Muda o texto do botão
+        });
+
+        resetBtn.addEventListener('click', () => {
+            clearInterval(interval); // Para o contador
+            countdownElement.textContent = '00:00'; // Zera o contador
+            countdownElement.style.color = 'black'; // Reseta a cor do texto
+            isPaused = false; // Garante que não está pausado
+            pauseBtn.textContent = 'Pausar'; // Reseta o texto do botão de pausa
+        });
+
+        startBtn1.addEventListener('click', () => {
+            isPaused = false;
+            contadorregressivo(1, 0);
+        });
+        
+        startBtn2.addEventListener('click', () => {
+            isPaused = false;
+            contadorregressivo(2, 0);
+        });
+        
+        startBtn3.addEventListener('click', () => {
+            isPaused = false;
+            contadorregressivo(3, 0);
+        });
+        
+        startBtn5.addEventListener('click', () => {
+            isPaused = false;
+            contadorregressivo(5, 0);
+        }); 
+        
+    </script>
+</body>
+</html>
+
